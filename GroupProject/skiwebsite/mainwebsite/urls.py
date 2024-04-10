@@ -6,8 +6,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Employee URLs
     path('employees/', views.EmployeeList.as_view(), name='employee_list'),
-    path('employees/add/', views.EmployeeAdd.as_view(), name='employee_add'),
-    path('employees/edit/<int:pk>/', views.EmployeeUpdate.as_view(), name='employee_edit'),
+    path('employeeadd/', views.EmployeeAdd.as_view(), name='employee_form'),
+    path('employeeedit/<int:pk>/', views.EmployeeUpdate.as_view(), name='employee_edit'),
     path('employees/delete/<int:pk>/', views.EmployeeDelete.as_view(), name='employee_delete'),
     # Customer URLs
     path('customers/', views.CustomerList.as_view(), name='customer_list'),

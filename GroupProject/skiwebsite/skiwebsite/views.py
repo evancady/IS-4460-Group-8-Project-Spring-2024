@@ -29,13 +29,13 @@ class EmployeeRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView
 class EmployeeList(View):
     def get(self, request):
         employees = Employee.objects.all()
-        return render(request, 'employees/employee_list.html', {'employees': employees})
+        return render(request, 'skiwebsite/employee_list.html', {'employees': employees})
 
 
 class EmployeeAdd(View):
     def get(self, request):
         form = EmployeeForm()
-        return render(request, 'employees/employee_add.html', {'form': form})
+        return render(request, 'skiwebsite/employee_add.html', {'form': form})
 
     def post(self, request):
         form = EmployeeForm(request.POST)
