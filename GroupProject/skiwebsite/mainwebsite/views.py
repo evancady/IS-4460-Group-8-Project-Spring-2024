@@ -94,12 +94,12 @@ class CustomerAdd(View):
 
 class CustomerUpdate(View):
     def get(self, request, id):
-        customer = get_object_or_404(Customer, pk=id)
+        customer = get_object_or_404(Customer, id=[pk])
         form = CustomerForm(instance=customer)
         return render(request, 'customers/customer_update.html', {'form': form, 'customer': customer})
 
     def post(self, request, id):
-        customer = get_object_or_404(Customer, pk=id)
+        customer = get_object_or_404(Customer, id=pk)
         form = CustomerForm(request.POST, instance=customer)
         if form.is_valid():
             form.save()
@@ -109,7 +109,7 @@ class CustomerUpdate(View):
 
 class CustomerDelete(View):
     def get(self, request, id):
-        customer = get_object_or_404(Customer, pk=id)
+        customer = get_object_or_404(Customer, id=id)
         customer.delete()
         return redirect('customer_list')
 
