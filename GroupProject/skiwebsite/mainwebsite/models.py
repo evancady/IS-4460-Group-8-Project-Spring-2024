@@ -6,7 +6,7 @@ class Payment(models.Model):
     date = models.DateField()
     order_id = models.ForeignKey('Order', on_delete=models.CASCADE)
     cust_id = models.ForeignKey('Customer', on_delete=models.CASCADE)
-    credit_card = models.CharField(max_length=19)
+    credit_card = models.CharField(max_length=19) 
 
 
 class Employee(models.Model):
