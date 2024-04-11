@@ -24,7 +24,7 @@ class EmployeeRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView
 class EmployeeList(View):
     def get(self, request):
         employees = Employee.objects.all()
-        return render(request, 'mainwebsite/employee_list.html', {'employees': employees})
+        return render(request, 'employees/employee_list.html', {'employees': employees})
 
 
 class EmployeeAdd(View):
