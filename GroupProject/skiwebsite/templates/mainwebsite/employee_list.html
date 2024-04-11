@@ -43,7 +43,7 @@
     <ul>
         {% for employee in employees %}
             <li>
-                {{ employee.first_name }} {{ employee.last_name }}
+                {{ employee.first }} {{ employee.last }}
                 - <a href="{% url 'employee_edit' employee.pk %}">Edit</a>
                 - <a href="{% url 'employee_delete' employee.pk %}">Delete</a>
             </li>
