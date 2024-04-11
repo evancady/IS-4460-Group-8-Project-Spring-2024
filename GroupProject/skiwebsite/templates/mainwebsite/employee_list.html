@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            color: navy;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+{% block content %}
+    <h2>Employee List</h2>
+    <a href="{% url 'employee_form' %}">Add New Employee</a>
+    <ul>
+        {% for employee in employees %}
+            <li>
+                {{ employee.first_name }} {{ employee.last_name }}
+                - <a href="{% url 'employee_edit' employee.pk %}">Edit</a>
+                - <a href="{% url 'employee_delete' employee.pk %}">Delete</a>
+            </li>
+        {% empty %}
+            <li>No employees found.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+</body>
+</html>

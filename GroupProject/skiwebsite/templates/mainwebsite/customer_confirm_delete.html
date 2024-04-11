@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Confirm Delete</title>
+</head>
+<body>
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Are you sure you want to delete "{{ customer.first_name }} {{ customer.last_name }}"?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="form-submit">Delete</button>
+        <a href="{% url 'customer_list' %}">Cancel</a>
+    </form>
+{% endblock %}
+
+</body>
+</html>
