@@ -93,8 +93,8 @@ class CustomerAdd(View):
 
 
 class CustomerUpdate(View):
-    def get(self, request, pk):
-        customer = get_object_or_404(Customer, pk=pk)
+    def get(self, request, id):
+        customer = get_object_or_404(Customer, pk=id)
         form = CustomerForm(instance=customer)
         return render(request, 'customers/customer_update.html', {'form': form, 'customer': customer})
 
