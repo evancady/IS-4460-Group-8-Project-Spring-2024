@@ -1,5 +1,5 @@
 from django import forms
-from .models import Employee, Customer, Order, Product, Payment, Return, RawMaterial
+from .models import Employee, Customer, Order, Product, Payment, ReturnObj, RawMaterial
 
 class EmployeeForm(forms.ModelForm):
     class Meta:
@@ -28,7 +28,7 @@ class PaymentForm(forms.ModelForm):
 
 class ReturnForm(forms.ModelForm):
     class Meta:
-        model = Return
+        model = ReturnObj
         fields = '__all__'
 
 class RawMaterialForm(forms.ModelForm):

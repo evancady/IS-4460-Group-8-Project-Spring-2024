@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add a New Customer</title>
+    <title>Edit Customer</title>
     <style>
         /* Add custom styles here */
         body {
@@ -36,13 +36,13 @@
 <body>
 
 {% block content %}
-    <h2>{{ view.title }}</h2>
+    <h2>Edit Customer</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="form-submit">Save Customer</button>
+        <button type="submit" class="form-submit">Update Customer</button>
     </form>
-    <a href="javascript:void(0)" onclick="window.history.back()">Back to Previous Page</a>
+    <a href="{% url 'customer_list' %}">Cancel</a>
 
 {% endblock %}
 

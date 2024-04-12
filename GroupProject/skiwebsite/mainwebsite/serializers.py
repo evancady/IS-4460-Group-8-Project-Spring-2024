@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Employee, Customer, Order, Product, Payment, Return, RawMaterial
+from .models import Employee, Customer, Order, Product, Payment, ReturnObj, RawMaterial
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -39,7 +39,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 
 class ReturnSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Return
+        model = ReturnObj
         fields = '__all__'
 
 

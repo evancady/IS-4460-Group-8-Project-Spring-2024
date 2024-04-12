@@ -1,6 +1,9 @@
-from mainwebsite.models import Employee, Customer, Order, Product
-from mainwebsite.forms import EmployeeForm, CustomerForm
-from .serializers import EmployeeSerializer, CustomerSerializer
+from mainwebsite.models import Employee, Customer, Order, Product, Payment
+from mainwebsite.forms import EmployeeForm, CustomerForm, OrderForm, PaymentForm
+
+from .forms import PaymentForm
+from .models import Payment
+from .serializers import EmployeeSerializer, CustomerSerializer, OrderSerializer, PaymentSerializer
 from rest_framework import generics
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
@@ -8,6 +11,7 @@ from django import forms
 from django.views.generic import FormView
 from django.views.generic import ListView
 from django.db.models import Sum, Count
+
 
 
 class EmployeeListCreateAPIView(generics.ListCreateAPIView):
@@ -24,7 +28,7 @@ class EmployeeRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView
 class EmployeeList(View):
     def get(self, request):
         employees = Employee.objects.all()
-        return render(request, 'mainwebsite/employee_list.html', {'employees': employees})
+        return render(request, 'employees/employee_list.html', {'employees': employees})
 
 
 class EmployeeAdd(View):
@@ -41,13 +45,13 @@ class EmployeeAdd(View):
 
 
 class EmployeeUpdate(View):
-    def get(self, request, id):
-        employee = get_object_or_404(Employee, pk=id)
+    def get(self, request, pk):
+        employee = get_object_or_404(Employee, pk=pk)
         form = EmployeeForm(instance=employee)
         return render(request, 'employees/employee_update.html', {'form': form, 'employee': employee})
 
-    def post(self, request, id):
-        employee = get_object_or_404(Employee, pk=id)
+    def post(self, request, pk):
+        employee = get_object_or_404(Employee, pk=pk)
         form = EmployeeForm(request.POST, instance=employee)
         if form.is_valid():
             form.save()
@@ -56,8 +60,8 @@ class EmployeeUpdate(View):
 
 
 class EmployeeDelete(View):
-    def get(self, request, id):
-        employee = get_object_or_404(Employee, pk=id)
+    def get(self, request, pk):
+        employee = get_object_or_404(Employee, pk=pk)
         employee.delete()
         return redirect('employee_list')
 
@@ -98,8 +102,8 @@ class CustomerUpdate(View):
         form = CustomerForm(instance=customer)
         return render(request, 'customers/customer_update.html', {'form': form, 'customer': customer})
 
-    def post(self, request, id):
-        customer = get_object_or_404(Customer, pk=id)
+    def post(self, request, pk):
+        customer = get_object_or_404(Customer, pk=pk)
         form = CustomerForm(request.POST, instance=customer)
         if form.is_valid():
             form.save()
@@ -108,8 +112,8 @@ class CustomerUpdate(View):
 
 
 class CustomerDelete(View):
-    def get(self, request, id):
-        customer = get_object_or_404(Customer, pk=id)
+    def get(self, request, pk):
+        customer = get_object_or_404(Customer, pk=pk)
         customer.delete()
         return redirect('customer_list')
 
@@ -148,3 +152,81 @@ class ProductPopularityReportView(ListView):
             total_sold=Sum('orderline__quantity'),
             orders_count=Count('orderline'),
         ).order_by('-total_sold')
+
+
+class OrderList(View):
+    def get(self, request):
+        orders = Order.objects.all()
+        return render(request, 'orders/order_list.html', {'orders': orders})
+
+
+class OrderAdd(View):
+    def get(self, request):
+        form = OrderForm()
+        return render(request, 'orders/order_add.html', {'form': form})
+
+    def post(self, request):
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('order_list')
+        return render(request, 'orders/order_add.html', {'form': form})
+
+
+class OrderDelete(View):
+    def get(self, request, pk):
+        order = get_object_or_404(Employee, pk=pk)
+        order.delete()
+        return redirect('order_list')
+
+
+class OrderUpdate(View):
+    def get(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        form = OrderForm(instance=order)
+        return render(request, 'orders/order_update.html', {'form': form, 'order': order})
+
+    def post(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        form = OrderForm(request.POST, instance=order)
+        if form.is_valid():
+            form.save()
+            return redirect('order_list')
+        return render(request, 'orders/order_update.html', {'form': form, 'order': order})
+
+class PaymentList(View):
+    def get(self, request):
+        payments = Payment.objects.all()
+        return render(request, 'payment/payment_list.html', {'payments': payments})
+
+class PaymentAdd(View):
+    def get(self, request):
+        form = PaymentForm()
+        return render(request, 'payment/payment_add.html', {'form': form})
+
+    def post(self, request):
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('payment_list')
+        return render(request, 'payment/payment_add.html', {'form': form})
+
+class PaymentDelete(View):
+    def get(self, request, pk):
+        payment = get_object_or_404(Payment, pk=pk)
+        payment.delete()
+        return redirect('payment_list')
+
+class PaymentUpdate(View):
+    def get(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        form = PaymentForm(instance=Payment)
+        return render(request, 'payment/payment_update.html', {'form': form, 'payment': Payment})
+
+    def post(self, request, pk):
+        payment = get_object_or_404(Payment, pk=pk)
+        form = OrderForm(request.POST, instance=payment)
+        if form.is_valid():
+            form.save()
+            return redirect('payment_list')
+        return render(request, 'payment/payment_update.html', {'form': form, 'payment': payment})

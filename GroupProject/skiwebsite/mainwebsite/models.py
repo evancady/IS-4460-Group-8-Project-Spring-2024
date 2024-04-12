@@ -6,7 +6,7 @@ class Payment(models.Model):
     date = models.DateField()
     order_id = models.ForeignKey('Order', on_delete=models.CASCADE)
     cust_id = models.ForeignKey('Customer', on_delete=models.CASCADE)
-    credit_card = models.CharField(max_length=19)
+    credit_card = models.CharField(max_length=19) 
 
 
 class Employee(models.Model):
@@ -49,7 +49,7 @@ class Shipping(models.Model):
     cost = models.DecimalField(max_digits=10, decimal_places=2)
 
 
-class Return(models.Model):
+class ReturnObj(models.Model):
     return_id = models.AutoField(primary_key=True)
     date = models.DateField()
     order = models.ForeignKey('Order', on_delete=models.CASCADE)

@@ -5,42 +5,45 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'skiwebsite.settings')
 
 django.setup()
 
-from skiwebsite.models import Payment, Employee, Customer, Order, Product, Shipping, Return, RawMaterial, OrderLine
+from mainwebsite.models import Payment, Employee, Customer, Order, Product, Shipping, ReturnObj, RawMaterial, OrderLine
+from datetime import datetime, timedelta
+import random
+from faker import Faker
 
 
 # Deleting all records from Payments
-all_payments = payment.objects.all()
+all_payments = Payment.objects.all()
 for payment in all_payments:
     payment.delete()
 
 # Deleting all records from Employees
-all_employees = employee.objects.all()
+all_employees = Employee.objects.all()
 for employee in all_employees:
     employee.delete()
     
 # Deleting all records from Customers
-all_customers = customer.objects.all()
+all_customers = Customer.objects.all()
 for customer in all_customers:
     customer.delete()
 
 # Deleting all records from Orders
-all_orders = order.objects.all()
+all_orders = Order.objects.all()
 for order in all_orders:
     order.delete()
 
 
 # Deleting all records from Products
-all_products = product.objects.all()
+all_products = Product.objects.all()
 for product in all_products:
     product.delete()
     
 # Deleting all records from Shipping
-all_shippings = shipping.objects.all()
+all_shippings = Shipping.objects.all()
 for shipping in all_shippings:
     shipping.delete()
     
 # Deleting all records from Return
-all_returns = return.objects.all()
+all_returns = ReturnObj.objects.all()
 for return_obj in all_returns:
     return_obj.delete()
     
@@ -54,11 +57,39 @@ all_order_lines = OrderLine.objects.all()
 for order_line in all_order_lines:
     order_line.delete()
 
-###Adding 20 rows for payments
-import random
-from faker import Faker
-from skiwebsite.models import Payment, Order, Customer
-from datetime import datetime, timedelta
+fake = Faker()
+
+# Create 20 fake employee records
+for _ in range(20):
+    last_name = fake.last_name()
+    first_name = fake.first_name()
+    position = fake.job()
+
+    # Create Employee instance and save to database
+    employee = Employee.objects.create(
+        last=last_name,
+        first=first_name,
+        position=position
+    )
+    employee.save()
+
+
+fake = Faker()
+
+# Create 20 fake customer records
+for _ in range(20):
+    first_name = fake.first_name()
+    last_name = fake.last_name()
+    address = fake.address()
+
+    # Create Customer instance and save to database
+    customer = Customer.objects.create(
+        first=first_name,
+        last=last_name,
+        address=address
+    )
+    customer.save()
+
 
 fake = Faker()
 
@@ -77,55 +108,6 @@ for _ in range(20):
         credit_card=credit_card
     )
     payment.save()
-
-###Adding 20 rows for Employees
-import random
-from faker import Faker
-from skiwebsite.models import Employee
-
-fake = Faker()
-
-# Create 20 fake employee records
-for _ in range(20):
-    last_name = fake.last_name()
-    first_name = fake.first_name()
-    position = fake.job()
-
-    # Create Employee instance and save to database
-    employee = Employee.objects.create(
-        last=last_name,
-        first=first_name,
-        position=position
-    )
-    employee.save()
-
-### Adding 20 rows for Customer
-import random
-from faker import Faker
-from skiwebsite.models import Customer
-
-fake = Faker()
-
-# Create 20 fake customer records
-for _ in range(20):
-    first_name = fake.first_name()
-    last_name = fake.last_name()
-    address = fake.address()
-
-    # Create Customer instance and save to database
-    customer = Customer.objects.create(
-        first=first_name,
-        last=last_name,
-        address=address
-    )
-    customer.save()
-
-###Adding 20 rows for Order
-
-import random
-from faker import Faker
-from skiwebsite.models import Order, Employee, Customer, Payment
-from datetime import datetime, timedelta
 
 fake = Faker()
 
@@ -154,14 +136,7 @@ for _ in range(20):
     )
     order.save()
 
-###Adding 20 rows for Product
-
-import random
-from faker import Faker
-from skiwebsite.models import Product
-
 fake = Faker()
-
 # Create 20 fake product records
 for _ in range(20):
     prod_name = fake.word()
@@ -186,11 +161,6 @@ for _ in range(20):
 
 ###Adding 20 rows for Shipping
 
-import random
-from faker import Faker
-from skiwebsite.models import Shipping
-from datetime import datetime, timedelta
-
 fake = Faker()
 
 # Create 20 fake shipping records
@@ -207,13 +177,7 @@ for _ in range(20):
     )
     shipping.save()
 
-###Adding 20 random rows for Return Table
     
-import random
-from faker import Faker
-from skiwebsite.models import Return, Order
-from datetime import datetime, timedelta
-
 fake = Faker()
 
 # Get all existing orders
@@ -226,18 +190,13 @@ for _ in range(20):
     quantity = random.randint(1, 10)  # Random quantity returned (between 1 and 10)
 
     # Create Return instance and save to database
-    ret = Return.objects.create(
+    ret = ReturnObj.objects.create(
         date=date,
         order=order,
         quantity=quantity
     )
     ret.save()
 
-###Creating 20 random rows for RawMaterials
-import random
-from faker import Faker
-from skiwebsite.models import RawMaterial
-from datetime import datetime, timedelta
 
 fake = Faker()
 
@@ -256,10 +215,6 @@ for _ in range(20):
         material_name=material_name
     )
     raw_material.save()
-###Creating 20 random rows for OrderLine
-import random
-from faker import Faker
-from skiwebsite.models import OrderLine
 
 fake = Faker()
 

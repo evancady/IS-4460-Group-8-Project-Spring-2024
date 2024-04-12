@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Customer List</title>
+    <title>Employee List</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,17 +38,17 @@
 <body>
 
 {% block content %}
-    <h2>Customer List</h2>
-    <a href="{% url 'customer_add' %}">Add New Customer</a>
+    <h2>Employee List</h2>
+    <a href="{% url 'employee_form' %}">Add New Employee</a>
     <ul>
-        {% for customer in customers %}
+        {% for employee in employees %}
             <li>
-                {{ customer.first }} {{ customer.last }}
-                - <a href="{% url 'customer_edit' customer.cust_id %}">Edit</a>
-                - <a href="{% url 'customer_delete' customer.cust_id %}">Delete</a>
+                {{ employee.first }} {{ employee.last }}
+                - <a href="{% url 'employee_edit' employee.pk %}">Edit</a>
+                - <a href="{% url 'employee_delete' employee.pk %}">Delete</a>
             </li>
         {% empty %}
-            <li>No customers found.</li>
+            <li>No employees found.</li>
         {% endfor %}
     </ul>
 {% endblock %}
