@@ -56,8 +56,8 @@ class EmployeeUpdate(View):
 
 
 class EmployeeDelete(View):
-    def get(self, request, id):
-        employee = get_object_or_404(Employee, pk=id)
+    def get(self, request, pk):
+        employee = get_object_or_404(Employee, pk=pk)
         employee.delete()
         return redirect('employee_list')
 
@@ -93,8 +93,8 @@ class CustomerAdd(View):
 
 
 class CustomerUpdate(View):
-    def get(self, request, pk):
-        customer = get_object_or_404(Customer, pk=[pk])
+    def get(self, request, id):
+        customer = get_object_or_404(Customer, pk=id)
         form = CustomerForm(instance=customer)
         return render(request, 'customers/customer_update.html', {'form': form, 'customer': customer})
 
