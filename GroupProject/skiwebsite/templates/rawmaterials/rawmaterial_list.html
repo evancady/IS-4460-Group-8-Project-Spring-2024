@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Raw Materials</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            color: navy;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+{% block content %}
+    <h2>List of Materials</h2>
+    <a href="{% url 'rawmaterialform' %}">Add New Materials</a>
+    <ul>
+        {% for rawmaterial in rawmaterials %}
+            <li>
+                {{ rawmaterial.cust_id_id }} {{ rawmaterial.total_price }} {{ rawmaterial.order_date }}
+                - <a href="{% url 'rawmaterial_edit' order.pk %}">Edit</a>
+                - <a href="{% url 'rawmaterial_delete' order.pk %}">Delete</a>
+            </li>
+        {% empty %}
+            <li>There are No Materials</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+Index: skiwebsite/skiwebsite/settings.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/skiwebsite/skiwebsite/settings.py b/skiwebsite/mainwebsite/settings.py
+rename from skiwebsite/skiwebsite/settings.py
+rename to skiwebsite/mainwebsite/settings.py
+--- a/skiwebsite/skiwebsite/settings.py	(revision 00da0b7d4a5551d9ca03ea47cce8fb3fd458b91e)
++++ b/skiwebsite/mainwebsite/settings.py	(date 1712281409903)
+@@ -38,7 +38,7 @@
+     'django.contrib.messages',
+     'django.contrib.staticfiles',
+     'rest_framework',
+-    'mainwebsite'
++    'skiwebsite.apps.SkiwebsiteConfig',
+ ]
+ 
+ MIDDLEWARE = [
+Index: skiwebsite/skiwebsite/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from skiwebsite.skiwebsite.models import Employee\nfrom .forms import EmployeeForm\nfrom skiwebsite.skiwebsite.serializers import EmployeeSerializer\nfrom rest_framework import generics\nfrom skiwebsite.skiwebsite.serializers import CustomerSerializer\nfrom django.shortcuts import render, get_object_or_404, redirect\nfrom django.views import View\nfrom skiwebsite.skiwebsite.models import Customer\nfrom .forms import CustomerForm\nfrom django import forms\nfrom django.views.generic import FormView\nfrom skiwebsite.skiwebsite.models import Order\nfrom django.views.generic import ListView\nfrom skiwebsite.skiwebsite.models import Product\nfrom django.db.models import Sum, Count\n\n\nclass EmployeeListCreateAPIView(generics.ListCreateAPIView):\n    queryset = Employee.objects.all()\n    serializer_class = EmployeeSerializer\n\n\nclass EmployeeRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):\n    queryset = Employee.objects.all()\n    serializer_class = EmployeeSerializer\n    lookup_field = 'id'\n\n\nclass EmployeeList(View):\n    def get(self, request):\n        employees = Employee.objects.all()\n        return render(request, 'employees/employee_list.html', {'employees': employees})\n\n\nclass EmployeeAdd(View):\n    def get(self, request):\n        form = EmployeeForm()\n        return render(request, 'employees/employee_add.html', {'form': form})\n\n    def post(self, request):\n        form = EmployeeForm(request.POST)\n        if form.is_valid():\n            form.save()\n            return redirect('employee_list')\n        return render(request, 'employees/employee_add.html', {'form': form})\n\n\nclass EmployeeUpdate(View):\n    def get(self, request, id):\n        employee = get_object_or_404(Employee, pk=id)\n        form = EmployeeForm(instance=employee)\n        return render(request, 'employees/employee_update.html', {'form': form, 'employee': employee})\n\n    def post(self, request, id):\n        employee = get_object_or_404(Employee, pk=id)\n        form = EmployeeForm(request.POST, instance=employee)\n        if form.is_valid():\n            form.save()\n            return redirect('employee_list')\n        return render(request, 'employees/employee_update.html', {'form': form, 'employee': employee})\n\n\nclass EmployeeDelete(View):\n    def get(self, request, id):\n        employee = get_object_or_404(Employee, pk=id)\n        employee.delete()\n        return redirect('employee_list')\n\n\nclass CustomerListCreateAPIView(generics.ListCreateAPIView):\n    queryset = Customer.objects.all()\n    serializer_class = CustomerSerializer\n\n\nclass CustomerRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):\n    queryset = Customer.objects.all()\n    serializer_class = CustomerSerializer\n    lookup_field = 'id'\n\n\nclass CustomerList(View):\n    def get(self, request):\n        customers = Customer.objects.all()\n        return render(request, 'customers/customer_list.html', {'customers': customers})\n\n\nclass CustomerAdd(View):\n    def get(self, request):\n        form = CustomerForm()\n        return render(request, 'customers/customer_add.html', {'form': form})\n\n    def post(self, request):\n        form = CustomerForm(request.POST)\n        if form.is_valid():\n            form.save()\n            return redirect('customer_list')\n        return render(request, 'customers/customer_add.html', {'form': form})\n\n\nclass CustomerUpdate(View):\n    def get(self, request, id):\n        customer = get_object_or_404(Customer, pk=id)\n        form = CustomerForm(instance=customer)\n        return render(request, 'customers/customer_update.html', {'form': form, 'customer': customer})\n\n    def post(self, request, id):\n        customer = get_object_or_404(Customer, pk=id)\n        form = CustomerForm(request.POST, instance=customer)\n        if form.is_valid():\n            form.save()\n            return redirect('customer_list')\n        return render(request, 'customers/customer_update.html', {'form': form, 'customer': customer})\n\n\nclass CustomerDelete(View):\n    def get(self, request, id):\n        customer = get_object_or_404(Customer, pk=id)\n        customer.delete()\n        return redirect('customer_list')\n\n\nclass SalesReportForm(forms.Form):\n    start_date = forms.DateField()\n    end_date = forms.DateField()\n\n\nclass SalesReportView(FormView, ListView):\n    template_name = 'admin/sales_report.html'\n    form_class = SalesReportForm\n    queryset = Order.objects.none()  # Default to no orders\n\n    def form_valid(self, form):\n        start_date = form.cleaned_data['start_date']\n        end_date = form.cleaned_data['end_date']\n        self.queryset = Order.objects.filter(date__range=(start_date, end_date)) \\\n            .annotate(total_sales=Sum('total_price')) \\\n            .order_by('-date')\n        return self.get(self.request)\n\n    def get_context_data(self, **kwargs):\n        context = super().get_context_data(**kwargs)\n        context['form'] = self.form_class(self.request.GET or None)\n        return context\n\n\nclass ProductPopularityReportView(ListView):\n    template_name = 'admin/product_popularity_report.html'\n    model = Product\n    context_object_name = 'products'\n\n    def get_queryset(self):\n        return Product.objects.annotate(\n            total_sold=Sum('orderline__quantity'),\n            orders_count=Count('orderline'),\n        ).order_by('-total_sold')\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/skiwebsite/skiwebsite/views.py b/skiwebsite/skiwebsite/views.py
+--- a/skiwebsite/skiwebsite/views.py	(revision 00da0b7d4a5551d9ca03ea47cce8fb3fd458b91e)
++++ b/skiwebsite/skiwebsite/views.py	(date 1712284262156)
+@@ -1,8 +1,8 @@
+-from skiwebsite.skiwebsite.models import Employee
++from skiwebsite.models import Employee
+ from .forms import EmployeeForm
+ from skiwebsite.skiwebsite.serializers import EmployeeSerializer
+ from rest_framework import generics
+-from skiwebsite.skiwebsite.serializers import CustomerSerializer
++from skiwebsite.serializers import Customer
+ from django.shortcuts import render, get_object_or_404, redirect
+ from django.views import View
+ from skiwebsite.skiwebsite.models import Customer
+@@ -69,12 +69,12 @@
+ 
+ class CustomerListCreateAPIView(generics.ListCreateAPIView):
+     queryset = Customer.objects.all()
+-    serializer_class = CustomerSerializer
++    serializer_class = Customer
+ 
+ 
+ class CustomerRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+     queryset = Customer.objects.all()
+-    serializer_class = CustomerSerializer
++    serializer_class = Customer
+     lookup_field = 'id'
+ 
+ 
