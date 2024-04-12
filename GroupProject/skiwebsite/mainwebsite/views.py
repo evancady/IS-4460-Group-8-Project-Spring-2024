@@ -1,5 +1,5 @@
 from mainwebsite.models import Employee, Customer, Order, Product
-from mainwebsite.forms import EmployeeForm, CustomerForm
+from mainwebsite.forms import EmployeeForm, CustomerForm, ProductForm
 from .serializers import EmployeeSerializer, CustomerSerializer
 from rest_framework import generics
 from django.shortcuts import render, get_object_or_404, redirect
@@ -93,7 +93,7 @@ class CustomerAdd(View):
 
 
 class CustomerUpdate(View):
-    def get(self, request, id):
+    def get(self, request, pk):
         customer = get_object_or_404(Customer, pk=id)
         form = CustomerForm(instance=customer)
         return render(request, 'customers/customer_update.html', {'form': form, 'customer': customer})
@@ -114,37 +114,47 @@ class CustomerDelete(View):
         return redirect('customer_list')
 
 
-class SalesReportForm(forms.Form):
-    start_date = forms.DateField()
-    end_date = forms.DateField()
+
+##Products CRUD:
+
+class ProductList(View):
+    def get(self, request):
+        products = Product.objects.all()
+        return render(request, 'products/product_list.html', {'products': products})
 
 
-class SalesReportView(FormView, ListView):
-    template_name = 'admin/sales_report.html'
-    form_class = SalesReportForm
-    queryset = Order.objects.none()  # Default to no orders
+class ProductAdd(View):
+    def get(self, request):
+        form = ProductForm()
+        return render(request, 'products/product_add.html', {'form': form})
 
-    def form_valid(self, form):
-        start_date = form.cleaned_data['start_date']
-        end_date = form.cleaned_data['end_date']
-        self.queryset = Order.objects.filter(date__range=(start_date, end_date)) \
-            .annotate(total_sales=Sum('total_price')) \
-            .order_by('-date')
-        return self.get(self.request)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = self.form_class(self.request.GET or None)
-        return context
+    def post(self, request):
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+        return render(request, 'products/product_add.html', {'form': form})
 
 
-class ProductPopularityReportView(ListView):
-    template_name = 'admin/product_popularity_report.html'
-    model = Product
-    context_object_name = 'products'
+class ProductUpdate(View):
+    def get(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        form = ProductForm(instance=product)
+        return render(request, 'products/product_update.html', {'form': form, 'product': product})
 
-    def get_queryset(self):
-        return Product.objects.annotate(
-            total_sold=Sum('orderline__quantity'),
-            orders_count=Count('orderline'),
-        ).order_by('-total_sold')
+    def post(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+        return render(request, 'products/product_update.html', {'form': form, 'product': product})
+
+
+class ProductDelete(View):
+    def get(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        product.delete()
+        return redirect('product_list')
+
+
