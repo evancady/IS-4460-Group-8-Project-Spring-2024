@@ -1,6 +1,6 @@
 from mainwebsite.models import Employee, Customer, Order, Product
-from mainwebsite.forms import EmployeeForm, CustomerForm
-from .serializers import EmployeeSerializer, CustomerSerializer
+from mainwebsite.forms import EmployeeForm, CustomerForm, OrderForm
+from .serializers import EmployeeSerializer, CustomerSerializer, OrderSerializer
 from rest_framework import generics
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
@@ -8,6 +8,7 @@ from django import forms
 from django.views.generic import FormView
 from django.views.generic import ListView
 from django.db.models import Sum, Count
+
 
 
 class EmployeeListCreateAPIView(generics.ListCreateAPIView):
@@ -148,3 +149,44 @@ class ProductPopularityReportView(ListView):
             total_sold=Sum('orderline__quantity'),
             orders_count=Count('orderline'),
         ).order_by('-total_sold')
+
+
+class OrderList(View):
+    def get(self, request):
+        orders = Order.objects.all()
+        return render(request, 'orders/order_list.html', {'orders': orders})
+
+
+class OrderAdd(View):
+    def get(self, request):
+        form = OrderForm()
+        return render(request, 'orders/order_add.html', {'form': form})
+
+    def post(self, request):
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('order_list')
+        return render(request, 'orders/order_add.html', {'form': form})
+
+
+class OrderDelete(View):
+    def get(self, request, pk):
+        order = get_object_or_404(Employee, pk=pk)
+        order.delete()
+        return redirect('order_list')
+
+
+class OrderUpdate(View):
+    def get(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        form = OrderForm(instance=order)
+        return render(request, 'orders/order_update.html', {'form': form, 'order': order})
+
+    def post(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        form = OrderForm(request.POST, instance=order)
+        if form.is_valid():
+            form.save()
+            return redirect('order_list')
+        return render(request, 'orders/order_update.html', {'form': form, 'order': order})
