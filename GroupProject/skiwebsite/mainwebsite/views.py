@@ -41,13 +41,13 @@ class EmployeeAdd(View):
 
 
 class EmployeeUpdate(View):
-    def get(self, request, id):
-        employee = get_object_or_404(Employee, pk=id)
+    def get(self, request, pk):
+        employee = get_object_or_404(Employee, pk=pk)
         form = EmployeeForm(instance=employee)
         return render(request, 'employees/employee_update.html', {'form': form, 'employee': employee})
 
-    def post(self, request, id):
-        employee = get_object_or_404(Employee, pk=id)
+    def post(self, request, pk):
+        employee = get_object_or_404(Employee, pk=pk)
         form = EmployeeForm(request.POST, instance=employee)
         if form.is_valid():
             form.save()
@@ -56,8 +56,8 @@ class EmployeeUpdate(View):
 
 
 class EmployeeDelete(View):
-    def get(self, request, id):
-        employee = get_object_or_404(Employee, pk=id)
+    def get(self, request, pk):
+        employee = get_object_or_404(Employee, pk=pk)
         employee.delete()
         return redirect('employee_list')
 
@@ -93,13 +93,13 @@ class CustomerAdd(View):
 
 
 class CustomerUpdate(View):
-    def get(self, request, id):
-        customer = get_object_or_404(Customer, pk=id)
+    def get(self, request, pk):
+        customer = get_object_or_404(Customer, pk=pk)
         form = CustomerForm(instance=customer)
         return render(request, 'customers/customer_update.html', {'form': form, 'customer': customer})
 
-    def post(self, request, id):
-        customer = get_object_or_404(Customer, pk=id)
+    def post(self, request, pk):
+        customer = get_object_or_404(Customer, pk=pk)
         form = CustomerForm(request.POST, instance=customer)
         if form.is_valid():
             form.save()
@@ -108,8 +108,8 @@ class CustomerUpdate(View):
 
 
 class CustomerDelete(View):
-    def get(self, request, id):
-        customer = get_object_or_404(Customer, pk=id)
+    def get(self, request, pk):
+        customer = get_object_or_404(Customer, pk=pk)
         customer.delete()
         return redirect('customer_list')
 
