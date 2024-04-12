@@ -20,6 +20,11 @@ urlpatterns = [
     path('orders/add/', views.OrderAdd.as_view(), name='order_add'),
     path('orders/add/', views.OrderAdd.as_view(), name='order_form'),
     path('orders/delete/<int:pk>/', views.EmployeeDelete.as_view(), name='employee_delete'),
+    # Raw Material 
+    path('rawmaterials/', views.RawMaterialList.as_view(), name='rawmaterial_list'),
+    path('rawmaterials/add/', views.RawMaterialAdd.as_view(), name='rawmaterial_add'),
+    path('rawmaterials/edit/<int:pk>/', views.RawMaterialUpdate.as_view(), name='rawmaterial_edit'),
+    path('rawmaterials/delete/<int:pk>/', views.RawMaterialDelete.as_view(), name='rawmaterial_delete'),
 
 
 
