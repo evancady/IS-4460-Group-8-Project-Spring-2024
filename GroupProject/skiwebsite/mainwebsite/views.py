@@ -112,39 +112,3 @@ class CustomerDelete(View):
         customer = get_object_or_404(Customer, pk=pk)
         customer.delete()
         return redirect('customer_list')
-
-
-class SalesReportForm(forms.Form):
-    start_date = forms.DateField()
-    end_date = forms.DateField()
-
-
-class SalesReportView(FormView, ListView):
-    template_name = 'admin/sales_report.html'
-    form_class = SalesReportForm
-    queryset = Order.objects.none()  # Default to no orders
-
-    def form_valid(self, form):
-        start_date = form.cleaned_data['start_date']
-        end_date = form.cleaned_data['end_date']
-        self.queryset = Order.objects.filter(date__range=(start_date, end_date)) \
-            .annotate(total_sales=Sum('total_price')) \
-            .order_by('-date')
-        return self.get(self.request)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = self.form_class(self.request.GET or None)
-        return context
-
-
-class ProductPopularityReportView(ListView):
-    template_name = 'admin/product_popularity_report.html'
-    model = Product
-    context_object_name = 'products'
-
-    def get_queryset(self):
-        return Product.objects.annotate(
-            total_sold=Sum('orderline__quantity'),
-            orders_count=Count('orderline'),
-        ).order_by('-total_sold')
