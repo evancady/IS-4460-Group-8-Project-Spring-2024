@@ -1,6 +1,9 @@
-from mainwebsite.models import Employee, Customer, Order, Product
-from mainwebsite.forms import EmployeeForm, CustomerForm, OrderForm
-from .serializers import EmployeeSerializer, CustomerSerializer, OrderSerializer
+from mainwebsite.models import Employee, Customer, Order, Product, Payment
+from mainwebsite.forms import EmployeeForm, CustomerForm, OrderForm, PaymentForm
+
+from .forms import PaymentForm
+from .models import Payment
+from .serializers import EmployeeSerializer, CustomerSerializer, OrderSerializer, PaymentSerializer
 from rest_framework import generics
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
@@ -190,3 +193,40 @@ class OrderUpdate(View):
             form.save()
             return redirect('order_list')
         return render(request, 'orders/order_update.html', {'form': form, 'order': order})
+
+class PaymentList(View):
+    def get(self, request):
+        payments = Payment.objects.all()
+        return render(request, 'payment/payment_list.html', {'payments': payments})
+
+class PaymentAdd(View):
+    def get(self, request):
+        form = PaymentForm()
+        return render(request, 'payment/payment_add.html', {'form': form})
+
+    def post(self, request):
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('payment_list')
+        return render(request, 'payment/payment_add.html', {'form': form})
+
+class PaymentDelete(View):
+    def get(self, request, pk):
+        payment = get_object_or_404(Payment, pk=pk)
+        payment.delete()
+        return redirect('payment_list')
+
+class PaymentUpdate(View):
+    def get(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        form = PaymentForm(instance=Payment)
+        return render(request, 'payment/payment_update.html', {'form': form, 'payment': Payment})
+
+    def post(self, request, pk):
+        payment = get_object_or_404(Payment, pk=pk)
+        form = OrderForm(request.POST, instance=payment)
+        if form.is_valid():
+            form.save()
+            return redirect('payment_list')
+        return render(request, 'payment/payment_update.html', {'form': form, 'payment': payment})

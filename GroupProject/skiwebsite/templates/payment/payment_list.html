@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Orders</title>
+    <title>Payments</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,17 +38,19 @@
 <body>
 
 {% block content %}
-    <h2>List of Orders</h2>
-    <a href="{% url 'order_form' %}">Create New Order</a>
+    <h2>Payment List</h2>
+    <a href="{% url 'payment_form' %}">Add a New Payment</a>
     <ul>
-        {% for order in orders %}
+        {% for payment in payments %}
             <li>
-                {{ order.cust_id_id }} {{ order.total_price }} {{ order.order_date }}
-                - <a href="{% url 'order_update' order.pk %}">Edit</a>
-                - <a href="{% url 'order_delete' order.pk %}">Delete</a>
+                {{ payment.cust_id_id }} {{ payment.credit_card }} {{ payment.date }}
+                - <a href="{% url 'payment_update' payment.pk %}">Edit</a>
+                - <a href="{% url 'payment_delete' payment.pk %}">Delete</a>
+
+
             </li>
         {% empty %}
-            <li>There are No Orders</li>
+            <li>There are No Payments</li>
         {% endfor %}
     </ul>
 {% endblock %}
