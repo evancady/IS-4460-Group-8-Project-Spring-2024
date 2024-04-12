@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Orders</title>
+    <title>Raw Materials</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,21 +38,17 @@
 <body>
 
 {% block content %}
-    <h2>List of Orders</h2>
-    <a href="{% url 'order_form' %}">Create New Order</a>
+    <h2>List of Materials</h2>
+    <a href="{% url 'rawmaterialform' %}">Add New Materials</a>
     <ul>
-        {% for order in orders %}
+        {% for rawmaterial in rawmaterials %}
             <li>
-                {{ order.cust_id_id }} {{ order.total_price }} {{ order.order_date }}
-<<<<<<< HEAD
-                - <a href="{% url 'order_update' order.pk %}">Edit</a>
-=======
-                - <a href="{% url 'order_edit' order.pk %}">Edit</a>
->>>>>>> 0a5ab0478f906519dd2175942292e1ae89576aa1
-                - <a href="{% url 'order_delete' order.pk %}">Delete</a>
+                {{ rawmaterial.cust_id_id }} {{ rawmaterial.total_price }} {{ rawmaterial.order_date }}
+                - <a href="{% url 'rawmaterial_edit' order.pk %}">Edit</a>
+                - <a href="{% url 'rawmaterial_delete' order.pk %}">Delete</a>
             </li>
         {% empty %}
-            <li>There are No Orders</li>
+            <li>There are No Materials</li>
         {% endfor %}
     </ul>
 {% endblock %}

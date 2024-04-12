@@ -17,6 +17,17 @@ urlpatterns = [
     path('customers/delete/<int:pk>/', views.CustomerDelete.as_view(), name='customer_delete'),
     # Order URLs
     path('orders/', views.OrderList.as_view(), name='order_list'),
+<<<<<<< HEAD
+=======
+    path('orders/add/', views.OrderAdd.as_view(), name='order_add'),
+    path('orders/add/', views.OrderAdd.as_view(), name='order_form'),
+    path('orders/delete/<int:pk>/', views.EmployeeDelete.as_view(), name='employee_delete'),
+    # Raw Material 
+    path('rawmaterials/', views.RawMaterialList.as_view(), name='rawmaterial_list'),
+    path('rawmaterials/add/', views.RawMaterialAdd.as_view(), name='rawmaterial_add'),
+    path('rawmaterials/edit/<int:pk>/', views.RawMaterialUpdate.as_view(), name='rawmaterial_edit'),
+    path('rawmaterials/delete/<int:pk>/', views.RawMaterialDelete.as_view(), name='rawmaterial_delete'),
+>>>>>>> 0a5ab0478f906519dd2175942292e1ae89576aa1
 
     path('orders/add/', views.OrderAdd.as_view(), name='order_form'),
     path('orders/update/<int:pk>/', views.OrderUpdate.as_view(), name='order_update'),

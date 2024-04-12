@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 from mainwebsite.models import Employee, Customer, Order, Product, Payment
 from mainwebsite.forms import EmployeeForm, CustomerForm, OrderForm, PaymentForm
 
 from .forms import PaymentForm
 from .models import Payment
 from .serializers import EmployeeSerializer, CustomerSerializer, OrderSerializer, PaymentSerializer
+=======
+from mainwebsite.models import Employee, Customer, Order, Product, RawMaterial
+from mainwebsite.forms import EmployeeForm, CustomerForm, OrderForm, RawMaterialForm
+from .serializers import EmployeeSerializer, CustomerSerializer, OrderSerializer
+>>>>>>> 0a5ab0478f906519dd2175942292e1ae89576aa1
 from rest_framework import generics
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
@@ -194,6 +200,7 @@ class OrderUpdate(View):
             return redirect('order_list')
         return render(request, 'orders/order_update.html', {'form': form, 'order': order})
 
+<<<<<<< HEAD
 class PaymentList(View):
     def get(self, request):
         payments = Payment.objects.all()
@@ -230,3 +237,45 @@ class PaymentUpdate(View):
             form.save()
             return redirect('payment_list')
         return render(request, 'payment/payment_update.html', {'form': form, 'payment': payment})
+=======
+
+class RawMaterialList(View):
+    def get(self, request):
+        rawmaterials = RawMaterial.objects.all()
+        return render(request, 'rawmaterials/rawmaterial_list.html', {'rawmaterials': rawmaterials})
+
+
+class RawMaterialAdd(View):
+    def get(self, request):
+        form = RawMaterialForm()
+        return render(request, 'rawmaterials/rawmaterial_add.html', {'form': form})
+
+    def post(self, request):
+        form = RawMaterialForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('rawmaterials_list')
+        return render(request, 'rawmaterials/rawmaterial_add.html', {'form': form})
+
+
+class RawMaterialDelete(View):
+    def get(self, request, pk):
+        rawmaterial = get_object_or_404(Employee, pk=pk)
+        rawmaterial.delete()
+        return redirect('order_list')
+
+
+class RawMaterialUpdate(View):
+    def get(self, request, pk):
+        rawmaterial = get_object_or_404(RawMaterial, pk=pk)
+        form = RawMaterialForm(instance=rawmaterial)
+        return render(request, 'rawmaterials/rawmaterial_update.html', {'form': form, 'rawmaterial': rawmaterial})
+
+    def post(self, request, pk):
+        rawmaterial = get_object_or_404(RawMaterial, pk=pk)
+        form = RawMaterialForm(request.POST, instance=rawmaterial)
+        if form.is_valid():
+            form.save()
+            return redirect('rawmaterial_list')
+        return render(request, 'rawmaterials/rawmaterial_update.html', {'form': form, 'rawmaterial': rawmaterial})
+>>>>>>> 0a5ab0478f906519dd2175942292e1ae89576aa1

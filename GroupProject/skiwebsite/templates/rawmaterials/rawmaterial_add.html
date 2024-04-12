@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-<<<<<<< HEAD
-    <title>Edit Order</title>
+    <title>Add New Materials</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,22 +56,16 @@
 <body>
 
 {% block content %}
-    <h2>Edit Order</h2>
+    <h2>{{ view.title }}</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="form-submit">Update Order</button>
+        <button type="submit" class="form-submit">Save Raw Material</button>
     </form>
-    <a href="{% url 'order_list' %}">Back to Order List</a>
+<a href="javascript:void(0)" onclick="window.history.back()">Back to Previous Page</a>
+
+
 
 {% endblock %}
 </body>
 </html>
-=======
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
->>>>>>> 0a5ab0478f906519dd2175942292e1ae89576aa1
